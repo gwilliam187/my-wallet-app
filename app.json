@@ -26,7 +26,7 @@
       "supportsTablet": true
     },
     "androidStatusBar": {
-      "translucent": true
-    },
+      "barStyle": "light-content"
+    }
   }
 }

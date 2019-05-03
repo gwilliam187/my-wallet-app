@@ -4,46 +4,46 @@ import { Icon } from 'expo';
 
 import Colors from '../constants/Colors';
 
-export default class TransactionAmountInput extends Component {
+export default class TransactionNoteInput extends Component {
 	state = {
 		inputVal: null
 	};
 
 	render() {
 		return (
-			<View style={ styles.myInputWrapper }>
+			<View style={ styles.inputWrapper }>
 				<View style={{ marginRight: 20 }}>
 					<Icon.MaterialCommunityIcons 
-							name='currency-eur' 
-							color={ Colors.primary } 
-							size={ 28 } />
+							name='notebook' 
+							color={ Colors.neutral } 
+							size={ 24 } />
 				</View>
-				<TextInput
-						onChangeText={ (text) => this.setState({inputVal: text}) }
-						keyboardType='decimal-pad'
-						value={ this.state.val }
-						placeholder='Input amount'
-						style={ styles.myInput } />
+				<TextInput 
+						onChangeText={ val => this.setState({ inputVal: val }) }
+						value={ this.state.inputVal }
+						placeholder='Write note'
+						multiline={ true }
+						style={ styles.input } />
 			</View>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
-	myInputWrapper: {
+	inputWrapper: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingTop: 15,
+		paddingTop: 8,
 		paddingRight: 20,
-		paddingBottom: 15,
+		paddingBottom: 8,
 		paddingLeft: 20,
 		marginBottom: 8,
 		borderRadius: 8,
 		backgroundColor: '#FFFFFF',
 	},
-	myInput: {
+	input: {
 		flex: 1,
-		fontSize: 24,
+		fontSize: 14,
 		color: Colors.neutral
 	}
 })

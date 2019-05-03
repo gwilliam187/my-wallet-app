@@ -2,16 +2,22 @@ import React, { Component } from 'react';
 import { View, Text, StatusBar, StyleSheet } from 'react-native';
 
 import TransactionAmountInput from '../components/TransactionAmountInput';
+import TransactionDateInput from '../components/TransactionDateInput';
+import TransactionNoteInput from '../components/TransactionNoteInput';
 import SaveTransactionButton from '../components/SaveTransactionButton';
+import Header from '../navigation/Header';
 import Colors from '../constants/Colors';
 
 export default class AddTransactionScreen extends Component {
 	render() {
 		return (
 			<View style={ styles.root }>
+				<Header />
 				<View style={ styles.container }>
 					<Text style={ styles.title }>Add Transaction</Text>
 					<TransactionAmountInput />
+					<TransactionDateInput />
+					<TransactionNoteInput />
 					<SaveTransactionButton />
 				</View>
 			</View>
@@ -29,6 +35,10 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		padding: 15,
+	},
+	toolbar: {
+		height: 50,
+		backgroundColor: '#FFFFFF'
 	},
 	title: {
 		marginBottom: 15,
