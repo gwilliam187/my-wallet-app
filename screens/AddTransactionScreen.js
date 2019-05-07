@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StatusBar, StyleSheet } from 'react-native';
 
+import TransactionCategoryButton from '../components/TransactionCategoryButton';
 import TransactionAmountInput from '../components/TransactionAmountInput';
 import TransactionDateInput from '../components/TransactionDateInput';
 import TransactionNoteInput from '../components/TransactionNoteInput';
@@ -14,7 +15,7 @@ export default class AddTransactionScreen extends Component {
 			<View style={ styles.root }>
 				<Header />
 				<View style={ styles.container }>
-					<Text style={ styles.title }>Add Transaction</Text>
+					<TransactionCategoryButton />
 					<TransactionAmountInput />
 					<TransactionDateInput />
 					<TransactionNoteInput />

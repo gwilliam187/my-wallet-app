@@ -1,12 +1,27 @@
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font, Icon } from 'expo';
+import { AppLoading, Asset, Font, Icon, SQLite } from 'expo';
+import { createStore } from 'redux';
+import { Provider, connect } from 'react-redux';
+
 import AppNavigator from './navigation/AppNavigator';
+import { initialize, readCategories } from './sqlite';
+import reducers from './redux/reducers';
+import { setCategories } from './redux/actions/categoryActions';
+
+const store = createStore(reducers)
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
+
+  async componentDidMount() {
+    initialize();
+
+    const categories = await readCategories();
+    store.dispatch(setCategories(categories));
+  }
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -19,10 +34,12 @@ export default class App extends React.Component {
       );
     } else {
       return (
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
-        </View>
+        <Provider store={ store }>
+          <View style={styles.container}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+            <AppNavigator />
+          </View>
+         </Provider>
       );
     }
   }
@@ -60,3 +77,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 });
+
+const mapStateToProps = {};
+const mapDispatchToProps = {
+  setCategories
+};

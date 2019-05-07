@@ -8,6 +8,7 @@ import SettingsScreen from '../screens/SettingsScreen';
 
 import TransactionsScreen from '../screens/TransactionsScreen';
 import AddTransactionScreen from '../screens/AddTransactionScreen';
+import SelectCategoryScreen from '../screens/SelectCategoryScreen';
 import Colors from '../constants/Colors';
 
 const RouteConfigs = {
@@ -30,7 +31,7 @@ const RouteConfigs = {
 		}
 	},
 	Report: { 
-		screen: LinksScreen,
+		screen: SelectCategoryScreen,
 		navigationOptions: {
 			tabBarLabel: 'Report',
 			tabBarIcon: ({ focused, horizontal, tintColor }) => (
@@ -42,7 +43,7 @@ const RouteConfigs = {
 
 const MaterialBottomTabNavigatorConfig = {
 	shifting: false,
-	initialRouteName: 'Budget',
+	initialRouteName: 'Report',
 	activeColor: Colors.primary,
 	inactiveColor: Colors.neutral,
 	barStyle: { backgroundColor: '#ffffff' },

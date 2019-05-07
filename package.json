@@ -18,7 +18,9 @@
     "react-native-datepicker": "^1.7.2",
     "react-native-paper": "^2.15.2",
     "react-navigation": "^3.0.9",
-    "react-navigation-material-bottom-tabs": "^1.0.0"
+    "react-navigation-material-bottom-tabs": "^1.0.0",
+    "react-redux": "^6.0.1",
+    "redux": "^4.0.1"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0",
