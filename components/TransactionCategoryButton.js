@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableNativeFeedback, StyleSheet } from 'react-native';
 import { Icon } from 'expo';
 
 import Colors from '../constants/Colors';
@@ -7,41 +7,41 @@ import Colors from '../constants/Colors';
 export default class TransactionCategoryButton extends Component {
 	state = {
 		selected: false
-	}
-
-	onPressHandler = () => {
-		this.setState({ selected: !this.state.selected });
 	};
 
 	renderDefaultButton() {
 		return (
-			<TouchableOpacity 
-					onPress={ this.onPressHandler }
-					style={ styles.defaultButton }>
-				<View style={ styles.iconWrapper }>
-					<Icon.AntDesign
-							name='question'
-							color={ Colors.neutral }
-							size={ 32 } />
+			<TouchableNativeFeedback 
+					onPress={ this.props.onPressHandler }
+					useForeground={ true }>
+				<View style={ styles.defaultButton }>
+					<View style={ styles.iconWrapper }>
+						<Icon.AntDesign
+								name='question'
+								color={ Colors.neutral }
+								size={ 32 } />
+					</View>
+					<Text style={ styles.defaultButtonText }>Select Category</Text>
 				</View>
-				<Text style={ styles.defaultButtonText }>Select Category</Text>
-			</TouchableOpacity>
+			</TouchableNativeFeedback>
 		);
 	}
 
 	renderSelectedButton() {
 		return (
-			<TouchableOpacity 
-					onPress={ this.onPressHandler }
+			<TouchableNativeFeedback 
+					onPress={ this.props.onPressHandler }
 					style={ [styles.selectedButton, { backgroundColor: '#FF000080' }] }>
-				<View style={ styles.iconWrapper }>
-					<Icon.MaterialCommunityIcons
-							name='silverware-fork-knife'
-							color='#FFFFFF'
-							size={ 32 } />
+				<View>
+					<View style={ styles.iconWrapper }>
+						<Icon.MaterialCommunityIcons
+								name='silverware-fork-knife'
+								color='#FFFFFF'
+								size={ 32 } />
+					</View>
+					<Text style={ styles.selectedButtonText }>Food</Text>
 				</View>
-				<Text style={ styles.selectedButtonText }>Food</Text>
-			</TouchableOpacity>
+			</TouchableNativeFeedback>
 		);
 	}
 

@@ -1,21 +1,31 @@
 import React, { Component } from 'react';
-import { View, Text, StatusBar, StyleSheet } from 'react-native';
+import { View, Text, StatusBar, TouchableWithoutFeedback, StyleSheet } from 'react-native';
 
 import TransactionCategoryButton from '../components/TransactionCategoryButton';
 import TransactionAmountInput from '../components/TransactionAmountInput';
 import TransactionDateInput from '../components/TransactionDateInput';
 import TransactionNoteInput from '../components/TransactionNoteInput';
 import SaveTransactionButton from '../components/SaveTransactionButton';
-import Header from '../navigation/Header';
 import Colors from '../constants/Colors';
 
 export default class AddTransactionScreen extends Component {
+	state = {
+		categoryVal: null,
+		amountVal: null,
+		dateVal: null,
+		noteVal: null 
+	};
+
+	handleCategorySelect = () => {
+		console.log('call pls')
+		this.props.navigation.navigate('SelectCategory');
+	};
+
 	render() {
 		return (
 			<View style={ styles.root }>
-				<Header />
 				<View style={ styles.container }>
-					<TransactionCategoryButton />
+					<TransactionCategoryButton onPressHandler={ this.handleCategorySelect } />
 					<TransactionAmountInput />
 					<TransactionDateInput />
 					<TransactionNoteInput />

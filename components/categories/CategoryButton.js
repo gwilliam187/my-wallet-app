@@ -1,30 +1,53 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableNativeFeedback, StyleSheet } from 'react-native';
+import { Icon } from 'expo';
 
 export default class CategoryButton extends Component {
+	renderIcon() {
+		if(this.props.category.icon_family === 'MaterialCommunityIcons') {
+			return (
+				<View style={ styles.iconWrapper }>
+					<Icon.MaterialCommunityIcons
+							name={ this.props.category.icon_name }
+							color='#FFFFFF'
+							size={ 32 } />
+				</View>
+			);
+		}
+	}
+
 	render() {
+		const backgroundColor = this.props.category.color + '80';
+		const formattedText = this.props.category._id.charAt(0).toUpperCase() + 
+				this.props.category._id.slice(1);
 		return (
-			<TouchableOpacity style={ styles.button }>
-				<Text style={ styles.buttonText }>{ this.props.category._id }</Text>
-			</TouchableOpacity>
+			<TouchableNativeFeedback useForeground={ true }>
+				<View style={ [styles.button, { backgroundColor: backgroundColor }] }>
+					{ this.renderIcon() }
+					<Text style={ styles.buttonText }>{ formattedText }</Text>
+				</View>
+			</TouchableNativeFeedback>
 		);
 	}
 }
 
 const styles = StyleSheet.create({
 	button: {
-		flexDirection: 'column',
+		flexDirection: 'row',
 		alignSelf: 'stretch',
 		alignItems: 'center',
-		paddingTop: 10,
+		paddingTop: 15,
 		paddingRight: 20,
-		paddingBottom: 10,
+		paddingBottom: 15,
 		paddingLeft: 20,
 		marginBottom: 8,
-		borderRadius: 8,
-		backgroundColor: '#FF0000'
+		borderRadius: 8
 	},
 	buttonText: {
-		color: '#FFFFFF'
+		color: '#FFFFFF',
+		fontSize: 24
+	},
+	iconWrapper: {
+		marginRight: 20
 	}
 })

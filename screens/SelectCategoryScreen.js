@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import CategoryButton from '../components/categories/CategoryButton';
@@ -24,7 +24,6 @@ class SelectCategoryScreen extends Component {
 		return (
 			<View style={ styles.root }>
 				<View style={ styles.container }>
-					<Text>SelectCatScreen</Text>
 					{ this.renderList() }
 				</View>
 			</View>
@@ -52,15 +51,6 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		padding: 15,
-	},
-	toolbar: {
-		height: 50,
-		backgroundColor: '#FFFFFF'
-	},
-	title: {
-		marginBottom: 15,
-		fontSize: 24,
-		color: Colors.neutral
 	}
 });
 
