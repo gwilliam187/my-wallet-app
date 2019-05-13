@@ -5,10 +5,6 @@ import { Icon } from 'expo';
 import Colors from '../constants/Colors';
 
 export default class TransactionAmountInput extends Component {
-	state = {
-		inputVal: null
-	};
-
 	render() {
 		return (
 			<View style={ styles.myInputWrapper }>
@@ -19,9 +15,9 @@ export default class TransactionAmountInput extends Component {
 							size={ 28 } />
 				</View>
 				<TextInput
-						onChangeText={ (text) => this.setState({inputVal: text}) }
+						onChangeText={ val => this.props.onChangeHandler(val) }
+						value={ this.props.value }
 						keyboardType='decimal-pad'
-						value={ this.state.val }
 						placeholder='Input amount'
 						style={ styles.myInput } />
 			</View>

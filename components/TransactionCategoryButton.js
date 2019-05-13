@@ -5,10 +5,6 @@ import { Icon } from 'expo';
 import Colors from '../constants/Colors';
 
 export default class TransactionCategoryButton extends Component {
-	state = {
-		selected: false
-	};
-
 	renderDefaultButton() {
 		return (
 			<TouchableNativeFeedback 
@@ -27,26 +23,37 @@ export default class TransactionCategoryButton extends Component {
 		);
 	}
 
+	renderIcon() {
+		if(this.props.value.icon_family === 'MaterialCommunityIcons') {
+			return (
+				<View style={ styles.iconWrapper }>
+					<Icon.MaterialCommunityIcons
+							name={ this.props.value.icon_name }
+							color='#FFFFFF'
+							size={ 32 } />
+				</View>
+			);
+		}
+	}
+
 	renderSelectedButton() {
+		const backgroundColor = this.props.value.color + '80';
+		const formattedText = this.props.value._id.charAt(0).toUpperCase() + 
+				this.props.value._id.slice(1);
 		return (
 			<TouchableNativeFeedback 
 					onPress={ this.props.onPressHandler }
-					style={ [styles.selectedButton, { backgroundColor: '#FF000080' }] }>
-				<View>
-					<View style={ styles.iconWrapper }>
-						<Icon.MaterialCommunityIcons
-								name='silverware-fork-knife'
-								color='#FFFFFF'
-								size={ 32 } />
-					</View>
-					<Text style={ styles.selectedButtonText }>Food</Text>
+					useForeground={ true }>
+				<View style={ [styles.selectedButton, { backgroundColor: backgroundColor }] }>
+					{ this.renderIcon() }
+					<Text style={ styles.selectedButtonText }>{ formattedText }</Text>
 				</View>
 			</TouchableNativeFeedback>
 		);
 	}
 
 	render() {
-		if(!this.state.selected) return this.renderDefaultButton();
+		if(!this.props.value) return this.renderDefaultButton();
 		else return this.renderSelectedButton();	
 	}
 }
@@ -73,8 +80,7 @@ const styles = StyleSheet.create({
 		paddingBottom: 10,
 		paddingLeft: 20,
 		marginBottom: 8,
-		borderRadius: 8,
-		backgroundColor: '#FFFFFF'
+		borderRadius: 8
 	},
 	defaultButtonText: {
 		fontSize: 16,

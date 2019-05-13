@@ -10,14 +10,6 @@ export default class TransactionDateInput extends Component {
 		dateVal: null
 	}
 
-	// <DatePicker
-	// 	styles={{ display: 'block' }}
-	// 	showIcon={ false }
-	// 	onDateChange={ (date) => { this.setState({ date: date }) } } 
-	// 	customStyles={{ dateInput: styles.dateInput }} />
-
-	// <Text style={{ fontSize: 24 }}>26 August 2019</Text>
-
 	render() {
 		return (
 			<View style={ styles.dateInputWrapper }>
@@ -28,9 +20,10 @@ export default class TransactionDateInput extends Component {
 							size={ 24 } />
 				</View>
 				<DatePicker
-						onDateChange={ date => { this.setState({ dateVal: date }) } }
+						onDateChange={ date => this.props.onChangeHandler(date) }
+						date={ this.props.value }
+						placeholder=' '
 						format='D MMM YYYY'
-						date={ this.state.dateVal }
 						showIcon={ false } 
 						customStyles={{ dateInput: styles.dateInput, dateText: styles.dateText }}
 						style={{ flex: 1 }} />

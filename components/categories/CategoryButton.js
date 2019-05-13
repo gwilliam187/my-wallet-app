@@ -21,7 +21,9 @@ export default class CategoryButton extends Component {
 		const formattedText = this.props.category._id.charAt(0).toUpperCase() + 
 				this.props.category._id.slice(1);
 		return (
-			<TouchableNativeFeedback useForeground={ true }>
+			<TouchableNativeFeedback 
+					onPress={ () => this.props.onPressHandler(this.props.category) }
+					useForeground={ true }>
 				<View style={ [styles.button, { backgroundColor: backgroundColor }] }>
 					{ this.renderIcon() }
 					<Text style={ styles.buttonText }>{ formattedText }</Text>

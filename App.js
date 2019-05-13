@@ -5,7 +5,7 @@ import { createStore } from 'redux';
 import { Provider, connect } from 'react-redux';
 
 import AppNavigator from './navigation/AppNavigator';
-import { initialize, readCategories } from './sqlite';
+import { initialize, readCategories, readTransactions } from './sqlite';
 import reducers from './redux/reducers';
 import { setCategories } from './redux/actions/categoryActions';
 
@@ -20,6 +20,11 @@ export default class App extends React.Component {
     initialize();
 
     const categories = await readCategories();
+    const transactions = await readTransactions();
+    console.log('Categories');
+    console.log(categories);
+    console.log('Transactions');
+    console.log(transactions);
     store.dispatch(setCategories(categories));
   }
 

@@ -4,15 +4,11 @@ import { TouchableOpacity, Text, Button, StyleSheet } from 'react-native';
 import Colors from '../constants/Colors';
 
 export default class SaveTransactionButton extends Component {
-	onPressHandler = () => {
-		console.log('clicked')
-	};
-
 	render() {
 		return (
 			<TouchableOpacity
 					style={ styles.myButton }
-					onPress={ this.onPressHandler } >
+					onPress={ this.props.onPressHandler } >
 				<Text
 						style={ styles.myButtonText } >
 					Save Transaction</Text>

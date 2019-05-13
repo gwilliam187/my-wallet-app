@@ -19,8 +19,8 @@ export default class TransactionNoteInput extends Component {
 							size={ 24 } />
 				</View>
 				<TextInput 
-						onChangeText={ val => this.setState({ inputVal: val }) }
-						value={ this.state.inputVal }
+						onChangeText={ val => this.props.onChangeHandler(val) }
+						value={ this.props.value }
 						placeholder='Write note'
 						multiline={ true }
 						style={ styles.input } />

@@ -3,19 +3,20 @@ import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 
 import CategoryButton from '../components/categories/CategoryButton';
+import { setCategory } from '../redux/actions/currTransactionActions';
 import Colors from '../constants/Colors';
 
 class SelectCategoryScreen extends Component {
-	componentDidUpdate() {
-		console.log('update')
-		console.log(this.props.categories);
-	}
+	handleCategorySelect = val => this.props.setCategory(val);
 
 	renderList() {
 		const categories = this.props.categories;
 		return categories.map(category => {
 			return (
-				<CategoryButton category={ category } key={ category._id } />
+				<CategoryButton 
+						onPressHandler={ this.handleCategorySelect } 
+						category={ category } 
+						key={ category._id } />
 			);
 		})
 	}
@@ -38,7 +39,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-
+	setCategory
 };
 
 const styles = StyleSheet.create({
