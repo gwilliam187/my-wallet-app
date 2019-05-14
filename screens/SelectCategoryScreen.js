@@ -7,7 +7,10 @@ import { setCategory } from '../redux/actions/currTransactionActions';
 import Colors from '../constants/Colors';
 
 class SelectCategoryScreen extends Component {
-	handleCategorySelect = val => this.props.setCategory(val);
+	handleCategorySelect = val => {
+		this.props.setCategory(val);
+		this.props.navigation.goBack();
+	};
 
 	renderList() {
 		const categories = this.props.categories;

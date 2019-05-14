@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { View, Text, TouchableNativeFeedback, StyleSheet } from 'react-native';
 import { Icon } from 'expo';
 
-import Colors from '../constants/Colors';
+import CategoryIcon from '../categories/CategoryIcon';
+import Colors from '../../constants/Colors';
 
 export default class TransactionCategoryButton extends Component {
 	renderDefaultButton() {
@@ -10,30 +11,15 @@ export default class TransactionCategoryButton extends Component {
 			<TouchableNativeFeedback 
 					onPress={ this.props.onPressHandler }
 					useForeground={ true }>
-				<View style={ styles.defaultButton }>
-					<View style={ styles.iconWrapper }>
-						<Icon.AntDesign
-								name='question'
-								color={ Colors.neutral }
-								size={ 32 } />
-					</View>
+				<View style={ styles.unselectedButton }>
+					<CategoryIcon 
+							iconFamily={ 'AntDesign' } 
+							iconName={ 'question' }
+							dark={ true } />
 					<Text style={ styles.defaultButtonText }>Select Category</Text>
 				</View>
 			</TouchableNativeFeedback>
 		);
-	}
-
-	renderIcon() {
-		if(this.props.value.icon_family === 'MaterialCommunityIcons') {
-			return (
-				<View style={ styles.iconWrapper }>
-					<Icon.MaterialCommunityIcons
-							name={ this.props.value.icon_name }
-							color='#FFFFFF'
-							size={ 32 } />
-				</View>
-			);
-		}
 	}
 
 	renderSelectedButton() {
@@ -45,7 +31,9 @@ export default class TransactionCategoryButton extends Component {
 					onPress={ this.props.onPressHandler }
 					useForeground={ true }>
 				<View style={ [styles.selectedButton, { backgroundColor: backgroundColor }] }>
-					{ this.renderIcon() }
+					<CategoryIcon
+							iconFamily={ this.props.value.icon_family }
+							iconName={ this.props.value.icon_name } />
 					<Text style={ styles.selectedButtonText }>{ formattedText }</Text>
 				</View>
 			</TouchableNativeFeedback>
@@ -59,38 +47,37 @@ export default class TransactionCategoryButton extends Component {
 }
 
 const styles = StyleSheet.create({
-	defaultButton: {
-		flexDirection: 'column',
+	unselectedButton: {
+		flexDirection: 'row',
 		alignSelf: 'stretch',
 		alignItems: 'center',
-		paddingTop: 10,
+		paddingTop: 15,
 		paddingRight: 20,
-		paddingBottom: 10,
+		paddingBottom: 15,
 		paddingLeft: 20,
 		marginBottom: 8,
 		borderRadius: 8,
 		backgroundColor: '#FFFFFF'
 	},
 	selectedButton: {
-		flexDirection: 'column',
+		flexDirection: 'row',
 		alignSelf: 'stretch',
 		alignItems: 'center',
-		paddingTop: 10,
+		paddingTop: 15,
 		paddingRight: 20,
-		paddingBottom: 10,
+		paddingBottom: 15,
 		paddingLeft: 20,
 		marginBottom: 8,
-		borderRadius: 8
+		borderRadius: 8,
 	},
 	defaultButtonText: {
-		fontSize: 16,
-		color: Colors.primary
+		marginLeft: 16,
+		color: Colors.neutralFaded,
+		fontSize: 24,
 	},
 	selectedButtonText: {
-		fontSize: 16,
-		color: '#FFFFFF'
+		marginLeft: 16,
+		fontSize: 24,
+		color: '#FFFFFF',
 	},
-	iconWrapper: {
-		marginBottom: 8
-	}
 });

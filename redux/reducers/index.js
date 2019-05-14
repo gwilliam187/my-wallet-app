@@ -6,5 +6,6 @@ import currTransactionReducer from './currTransactionReducer';
 
 export default combineReducers({
 	categories: categoriesReducer,
+	transactions: transactionsReducer,
 	currTransaction: currTransactionReducer
 });

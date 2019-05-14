@@ -2,6 +2,10 @@
 // Categories - Actions
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 
+// Transactions - Actions
+export const SET_TRANSACTIONS = 'SET_TRANSACTIONS';
+export const ADD_TRANSACTION = 'ADD_TRANSACTION';
+
 // Current Transaction - Actions
 export const SET_CURRTRANSACTION_AMOUNT = 'SET_CURRTRANSACTION_AMOUNT';
 export const SET_CURRTRANSACTION_CATEGORY = 'SET_CURRTRANSACTION_CATEGORY';

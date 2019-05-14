@@ -3,12 +3,14 @@ import { View, Text, StatusBar, TouchableWithoutFeedback, StyleSheet } from 'rea
 import { connect } from 'react-redux';
 import { format } from 'date-fns';
 
-import TransactionCategoryButton from '../components/TransactionCategoryButton';
+import TransactionCategoryButton from '../components/transactionForm/TransactionCategoryButton';
 import TransactionAmountInput from '../components/TransactionAmountInput';
 import TransactionDateInput from '../components/TransactionDateInput';
 import TransactionNoteInput from '../components/TransactionNoteInput';
 import SaveTransactionButton from '../components/SaveTransactionButton';
 import { setAmount, setCategory, setDate, setNote } from '../redux/actions/currTransactionActions';
+import { addTransaction } from '../redux/actions/transactionsActions';
+import { getOneCategory } from '../constants/Categories';
 import Colors from '../constants/Colors';
 
 class AddTransactionScreen extends Component {
@@ -21,10 +23,10 @@ class AddTransactionScreen extends Component {
 	};
 
 	handleSaveClick = () => {
-		console.log(this.props.currTransaction);
+		this.props.addTransaction(this.props.currTransaction);
 	};
 
-	componentDidMount = () => {
+	componentDidMount() {
 		const date = format(new Date(), 'D MMM YYYY');
 		this.handleDateInput(date);
 	};
@@ -35,7 +37,7 @@ class AddTransactionScreen extends Component {
 				<View style={ styles.container }>
 					<TransactionCategoryButton 
 							onPressHandler={ this.handleCategorySelect }
-							value={ this.props.currTransaction.category } />
+							value={ getOneCategory(this.props.currTransaction.category) } />
 					<TransactionAmountInput 
 							onChangeHandler={ this.handleAmountInput } 
 							value={ this.props.currTransaction.amount } />
@@ -59,7 +61,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-	setAmount, setDate, setNote
+	setAmount, setDate, setNote, addTransaction
 };
 
 const styles = StyleSheet.create({
