@@ -1,29 +1,20 @@
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon, SQLite } from 'expo';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import { Provider, connect } from 'react-redux';
+import thunk from 'redux-thunk';
 
 import AppNavigator from './navigation/AppNavigator';
-import { initialize, readCategories, readTransactions } from './sqlite';
+import { initialize } from './sqlite';
 import reducers from './redux/reducers';
-import { setTransactions } from './redux/actions/transactionsActions';
 
-const store = createStore(reducers)
+const store = createStore(reducers, applyMiddleware(thunk))
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
   };
-
-  async componentDidMount() {
-    initialize();
-
-    const transactions = await readTransactions();
-    console.log('Transactions');
-    console.log(transactions);
-    store.dispatch(setTransactions(transactions));
-  }
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -59,6 +50,7 @@ export default class App extends React.Component {
         // to remove this if you are not using it in your app
         'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
       }),
+      initialize(),
     ]);
   };
 

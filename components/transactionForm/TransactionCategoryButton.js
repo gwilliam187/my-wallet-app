@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { View, Text, TouchableNativeFeedback, StyleSheet } from 'react-native';
 import { Icon } from 'expo';
 
-import CategoryIcon from '../categories/CategoryIcon';
+// import CategoryIcon from '../categories/CategoryIcon';
+import CategoryIcon from '../icons/CategoryIcon';
 import Colors from '../../constants/Colors';
 
 export default class TransactionCategoryButton extends Component {
@@ -13,9 +14,9 @@ export default class TransactionCategoryButton extends Component {
 					useForeground={ true }>
 				<View style={ styles.unselectedButton }>
 					<CategoryIcon 
-							iconFamily={ 'AntDesign' } 
-							iconName={ 'question' }
-							dark={ true } />
+							category={ null } 
+							color={ Colors.neutral }
+							size={ 32 } />
 					<Text style={ styles.defaultButtonText }>Select Category</Text>
 				</View>
 			</TouchableNativeFeedback>
@@ -24,17 +25,14 @@ export default class TransactionCategoryButton extends Component {
 
 	renderSelectedButton() {
 		const backgroundColor = this.props.value.color + '80';
-		const formattedText = this.props.value._id.charAt(0).toUpperCase() + 
-				this.props.value._id.slice(1);
+		
 		return (
 			<TouchableNativeFeedback 
 					onPress={ this.props.onPressHandler }
 					useForeground={ true }>
 				<View style={ [styles.selectedButton, { backgroundColor: backgroundColor }] }>
-					<CategoryIcon
-							iconFamily={ this.props.value.icon_family }
-							iconName={ this.props.value.icon_name } />
-					<Text style={ styles.selectedButtonText }>{ formattedText }</Text>
+					<CategoryIcon category={ this.props.value } />
+					<Text style={ styles.selectedButtonText }>{ this.props.value._id }</Text>
 				</View>
 			</TouchableNativeFeedback>
 		);

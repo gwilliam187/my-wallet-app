@@ -1,32 +1,45 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View, } from 'react-native';
 import { FAB } from 'react-native-paper';
 import { connect } from 'react-redux';
 
 import TransactionsList from '../components/transactionsList/TransactionsList';
+import { getTransactions } from '../redux/actions/transactionsActions';
+import { getCategories } from '../redux/actions/categoriesActions';
+import { resetCurrTransaction } from '../redux/actions/currTransactionActions';
 import Colors from '../constants/Colors';
 
 class TransactionsScreen extends Component {
 	fabOnPressHandler = () => {
+		this.props.resetCurrTransaction();
 		this.props.navigation.navigate('AddTransaction')
 	};
 
+	itemOnPressHandler = () => {
+		this.props.navigation.navigate('EditTransaction');
+	};
+
 	componentDidMount() {
-		this.props.navigation.addListener('willFocus', payload => {
-			console.log('willFocus ' + payload);
+		this.props.navigation.addListener('willFocus', async () => {
+			this.props.getTransactions();
 		})
 	}
 
-	componentDidUpdate() {
-		console.log('Transactions Store');
-		console.log(this.props.transactions);
+	renderLoading() {
+		return <ActivityIndicator size={ 64 } color={ Colors.primary } />;
+	}
+
+	renderTransactionList() {
+		return <TransactionsList 
+				transactions={ this.props.transactions.data } 
+				itemOnPressHandler={ this.itemOnPressHandler } />;
 	}
 
 	render() {
 		return (
 			<View style={ styles.root }>
 				<View style={ styles.container }>
-					<TransactionsList />
+					{ this.props.transactions.isFetching ? this.renderLoading() : this.renderTransactionList() }
 					<FAB 
 							onPress={ this.fabOnPressHandler }
 							icon='add'
@@ -43,7 +56,7 @@ const mapStateToProps = state => {
 	};
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = { getCategories, getTransactions, resetCurrTransaction };
 
 const styles = StyleSheet.create({
 	root: {

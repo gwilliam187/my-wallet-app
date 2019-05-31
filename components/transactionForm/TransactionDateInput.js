@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Icon } from 'expo';
 import DatePicker from 'react-native-datepicker';
+import moment from 'moment';
 
-import Colors from '../constants/Colors';
+import Colors from '../../constants/Colors';
 
 export default class TransactionDateInput extends Component {
 	state = {
@@ -21,7 +22,7 @@ export default class TransactionDateInput extends Component {
 				</View>
 				<DatePicker
 						onDateChange={ date => this.props.onChangeHandler(date) }
-						date={ this.props.value }
+						date={ moment(this.props.value).format('D MMM YYYY') }
 						placeholder=' '
 						format='D MMM YYYY'
 						showIcon={ false } 

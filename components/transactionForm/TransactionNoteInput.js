@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { Icon } from 'expo';
 
-import Colors from '../constants/Colors';
+import Colors from '../../constants/Colors';
 
 export default class TransactionNoteInput extends Component {
 	state = {

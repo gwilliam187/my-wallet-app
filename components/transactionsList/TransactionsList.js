@@ -1,52 +1,60 @@
 import React, { Component } from 'react';
 import { View, Text, SectionList, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 
 import TransactionsListHeader from './TransactionsListHeader';
 import TransactionsListItem from './TransactionsListItem';
 
-export default class TransactionsList extends Component {
-	sections = [
-		{
-			date: '14 May 2019',
-			data: [
-				{
-					_id: 1,
-					amount: 100,
-					category: 'Food',
-					note: 'asdfjljk alksdjf oaiekl askldjflkajsdklf aksj asjelfaksdj flak sdjflajldskf klasdj faj welfjdlsf j'
-				},
-				{
-					_id: 2,
-					amount: 20,
-					category: 'Groceries',
-					note: ''
-				}
-			]
-		},
-		{
-			date: '15 May 2019',
-			data: [
-				{
-					_id: 3,
-					amount: 70,
-					category: 'Food',
-					note: ''
-				}
-			]
-		}
-	];
+class TransactionsList extends Component {
+	mapTransactionsToSections = () => {
+		let sections = [];
+
+		this.props.transactions.forEach(transaction => {
+		  const i = sections.findIndex(section => section.date === transaction.date)
+		  if(i !== -1 && sections.length > 0) {
+		  	transaction.category.type === 'expense' ? 
+			  		sections[i].sum -= transaction.amount :
+			  		sections[i].sum += transaction.amount;
+		    sections[i].data.push(transaction);
+		  } else {
+		    const newObj = {
+		      date: transaction.date,
+		      sum: transaction.category.type === 'expense' ? -transaction.amount : +transaction.amount,
+		      data: [transaction]
+		    }
+		    sections.push(newObj)
+		  }
+		});
+
+		return sections;
+	}
 
 	render() {
-		return (
-			<SectionList 
-					renderItem={({ item, index, section }) => <TransactionsListItem value={ item } /> }
-					renderSectionHeader={({ section }) => <TransactionsListHeader section={ section } />}
-					sections={ this.sections }
-					keyExtractor={ item => item._id }
-					style={ styles.list } />
-		);
+		if(this.props.transactions.length > 0) {
+			return (
+				<SectionList 
+						renderItem={({ item, index, section }) => <TransactionsListItem item={ item } 
+								onPressHandler={ this.props.itemOnPressHandler } /> }
+						renderSectionHeader={({ section }) => <TransactionsListHeader section={ section } />}
+						sections={ this.mapTransactionsToSections() }
+						keyExtractor={ item => item._id }
+						style={ styles.list } />
+			);
+		} else {
+			return <Text>Empty</Text>
+		}
 	}
 }
+
+const mapStateToProps = state => {
+	return {};
+};
+
+const mapDispatchToProps = {
+
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionsList);
 
 const styles = StyleSheet.create({
 	list: {

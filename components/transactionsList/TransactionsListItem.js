@@ -1,41 +1,59 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableNativeFeedback, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 
+import { setAmount, setCategory, setDate, setNote } from '../../redux/actions/currTransactionActions'
 import CategoryIcon from '../icons/CategoryIcon';
 import CurrencyIcon from '../icons/CurrencyIcon';
-import { getOneCategory } from '../../constants/Categories';
 import Colors from '../../constants/Colors';
 
-export default class TransactionsListItem extends Component { 
+class TransactionsListItem extends Component { 
+	handleItemClick = () => {
+		const item = this.props.item;
+
+		this.props.setAmount(item.amount);
+		this.props.setCategory(item.category);
+		this.props.setDate(item.date);
+		this.props.setNote(item.note);
+
+		this.props.onPressHandler();
+	}
+
+	renderAmount() {
+		return (
+			<View style={ styles.amountWrapper }>
+				<Text style={ styles.operatorText }> { this.props.item.category.type === 'expense' ? '- ' : '+ ' }</Text>
+				<CurrencyIcon currency='euro' color='#FFF' size={ 18 }/>
+				<Text style={ styles.amountText }>{ this.props.item.amount }</Text>
+			</View>
+		);
+	}
+
 	renderNote() {
-		if(this.props.value.note) 
+		if(this.props.item.note) {
 			return (
 				<View style={ styles.noteWrapper }>
-					<Text style={ styles.noteText }>{ this.props.value.note }</Text>
+					<Text style={ styles.noteText }>{ this.props.item.note }</Text>
 				</View>
 			);
+		}
 	}
 
 	render() {
-		const category = getOneCategory(this.props.value.category);
-		const color = category.color + '80';
+		const color = this.props.item.category.color + '80';
 		return (
 			<TouchableNativeFeedback
-					useForeground={ true } >
+					useForeground={ true }
+					onPress={ this.handleItemClick } >
 				<View style={ [styles.itemWrapper, { backgroundColor: color }] }>
 					<View style={ styles.detailsWrapper }>
 						<View style={styles.iconWrapper}>
 							<CategoryIcon 
-									category={ this.props.value.category }
-									color='#FFF'
+									category={ this.props.item.category }
 									size={ 20 } />
-							<Text style={ styles.iconText }>{ category._id }</Text>
+							<Text style={ styles.iconText }>{ this.props.item.category._id }</Text>
 						</View>
-						<View style={ styles.amountWrapper }>
-							<Text style={ styles.operatorText }>+ </Text>
-							<CurrencyIcon currency='euro' color='#FFF' size={ 20 }/>
-							<Text style={ styles.amountText }>{ this.props.value.amount }</Text>
-						</View>
+						{ this.renderAmount() }
 					</View>
 					{ this.renderNote() }
 				</View>
@@ -44,9 +62,19 @@ export default class TransactionsListItem extends Component {
 	}
 }
 
+const mapStateToProps = state => {
+	return {};
+};
+
+const mapDispatchToProps = {
+	setAmount, setCategory, setDate, setNote
+};
+
 const styles = StyleSheet.create({
 	itemWrapper: {
 		flexDirection: 'column',
+		paddingTop: 4,
+		paddingBottom: 4,
 		marginBottom: 8,
 		borderRadius: 8,
 	},
@@ -77,9 +105,11 @@ const styles = StyleSheet.create({
 	},
 	amountText: {
 		color: '#FFF',
-		fontSize: 20,
+		fontSize: 18,
 	},
 	noteWrapper: {
+		paddingTop: 4,
+		paddingTop: 4,
 		paddingLeft: 16,
 		paddingBottom: 4,
 		paddingRight: 16,
@@ -88,6 +118,8 @@ const styles = StyleSheet.create({
 		backgroundColor: '#FFF',
 	},
 	noteText: {
-		color: Colors.neutralFaded,
+		color: Colors.neutralSlightFaded,
 	},
 });
+
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionsListItem);

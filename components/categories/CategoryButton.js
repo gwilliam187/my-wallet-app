@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableNativeFeedback, StyleSheet } from 'react-native';
 
-import CategoryIcon from './CategoryIcon';
+// import CategoryIcon from './CategoryIcon';
+import CategoryIcon from '../icons/CategoryIcon';
 
 export default class CategoryButton extends Component {
 	render() {
 		const backgroundColor = this.props.category.color + '80';
-		const formattedText = this.props.category._id.charAt(0).toUpperCase() + 
-				this.props.category._id.slice(1);
+		
 		return (
 			<TouchableNativeFeedback 
-					onPress={ () => this.props.onPressHandler(this.props.category._id) }
+					onPress={ () => this.props.onPressHandler(this.props.category) }
 					useForeground={ true }>
 				<View style={ [styles.button, { backgroundColor: backgroundColor }] }>
 					<CategoryIcon 
-							iconFamily={ this.props.category.icon_family }
-							iconName={ this.props.category.icon_name } />
-					<Text style={ styles.buttonText }>{ formattedText }</Text>
+							category={ this.props.category }
+							color='#FFF'
+							size={ 32 } />
+					<Text style={ styles.buttonText }>{ this.props.category._id }</Text>
 				</View>
 			</TouchableNativeFeedback>
 		);

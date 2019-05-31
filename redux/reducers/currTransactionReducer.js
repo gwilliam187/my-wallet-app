@@ -1,5 +1,5 @@
 import { SET_CURRTRANSACTION_AMOUNT, SET_CURRTRANSACTION_CATEGORY, 
-		SET_CURRTRANSACTION_DATE, SET_CURRTRANSACTION_NOTE } from '../actions/actionTypes';
+		SET_CURRTRANSACTION_DATE, SET_CURRTRANSACTION_NOTE, RESET_CURRTRANSACTION } from '../actions/actionTypes';
 
 export default(state = defaultState, action) => {
 	switch(action.type) {
@@ -11,6 +11,8 @@ export default(state = defaultState, action) => {
 			return { ...state, date: action.payload };
 		case SET_CURRTRANSACTION_NOTE:
 			return { ...state, note: action.payload };
+		case RESET_CURRTRANSACTION:
+			return defaultState;
 		default:
 			return state;
 	}

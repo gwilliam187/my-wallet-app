@@ -18,5 +18,3 @@ const categories = [
 		icon_name: 'shopping-cart'
 	}
 ];
-
-const categoriesNew = ['Food', 'Groceries']

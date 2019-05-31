@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View, } from 'react-native';
 import { connect } from 'react-redux';
 
 import CategoryButton from '../components/categories/CategoryButton';
+import { getCategories } from '../redux/actions/categoriesActions';
 import { setCategory } from '../redux/actions/currTransactionActions';
 import Colors from '../constants/Colors';
 
@@ -12,8 +13,18 @@ class SelectCategoryScreen extends Component {
 		this.props.navigation.goBack();
 	};
 
+	async componentDidMount() {
+		this.props.navigation.addListener('willFocus', async () => {
+			this.props.getCategories();
+		})
+	}
+
+	renderLoading() {
+		return <ActivityIndicator size={ 64 } color={ Colors.primary } />;
+	}
+
 	renderList() {
-		const categories = this.props.categories;
+		const categories = this.props.categories.data;
 		return categories.map(category => {
 			return (
 				<CategoryButton 
@@ -28,7 +39,7 @@ class SelectCategoryScreen extends Component {
 		return (
 			<View style={ styles.root }>
 				<View style={ styles.container }>
-					{ this.renderList() }
+					{ this.props.categories.isFetching ? this.renderLoading() : this.renderList() }
 				</View>
 			</View>
 		);
@@ -42,7 +53,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-	setCategory
+	getCategories, setCategory
 };
 
 const styles = StyleSheet.create({

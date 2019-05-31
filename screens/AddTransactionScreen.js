@@ -1,34 +1,75 @@
 import React, { Component } from 'react';
-import { View, Text, StatusBar, TouchableWithoutFeedback, StyleSheet } from 'react-native';
+import { View, Text, StatusBar, TouchableWithoutFeedback, ToastAndroid, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { format } from 'date-fns';
+import moment from 'moment';
 
 import TransactionCategoryButton from '../components/transactionForm/TransactionCategoryButton';
-import TransactionAmountInput from '../components/TransactionAmountInput';
-import TransactionDateInput from '../components/TransactionDateInput';
-import TransactionNoteInput from '../components/TransactionNoteInput';
-import SaveTransactionButton from '../components/SaveTransactionButton';
+import TransactionAmountInput from '../components/transactionForm/TransactionAmountInput';
+import TransactionDateInput from '../components/transactionForm/TransactionDateInput';
+import TransactionNoteInput from '../components/transactionForm/TransactionNoteInput';
+import TransactionSaveButton from '../components/transactionForm/TransactionSaveButton';
 import { setAmount, setCategory, setDate, setNote } from '../redux/actions/currTransactionActions';
 import { addTransaction } from '../redux/actions/transactionsActions';
-import { getOneCategory } from '../constants/Categories';
+import { createTransaction } from '../sqlite';
 import Colors from '../constants/Colors';
 
 class AddTransactionScreen extends Component {
 	handleAmountInput = val => this.props.setAmount(val);
-	handleDateInput = val => this.props.setDate(val);
+	handleDateInput = val => {
+		const parsed = moment(val, 'D MMM YYYY');
+		this.props.setDate(parsed);
+	}
 	handleNoteInput = val => this.props.setNote(val);
 
 	handleCategorySelect = () => {
 		this.props.navigation.navigate('SelectCategory');
 	};
 
-	handleSaveClick = () => {
-		this.props.addTransaction(this.props.currTransaction);
+	handleSaveClick = async () => {
+		if(this.checkIfComplete()) {
+			if(this.checkIfValid()) {
+				const formattedTransaction = {
+					amount: parseFloat(this.props.currTransaction.amount),
+					date: moment(this.props.currTransaction.date).format('YYYY-MM-DD'),
+					note: this.props.currTransaction.note || "",
+					categoryId: this.props.currTransaction.category.id 
+				};
+
+				const promise = await createTransaction(formattedTransaction);
+				if(promise) {
+					console.log(promise);
+				} else {
+					console.log(promise);
+				}
+			} else {
+				ToastAndroid.show('Invalid input', ToastAndroid.SHORT)
+			}
+		} else {
+			ToastAndroid.show('Please input empty data', ToastAndroid.SHORT)
+		}
 	};
 
+	checkIfComplete = () => {
+		if(this.props.currTransaction.amount && 
+				this.props.currTransaction.date &&
+				this.props.currTransaction.category) {
+			return true;
+		} else {
+			return false
+		}
+	};
+
+	checkIfValid = () => {
+		if(!isFinite(this.props.currTransaction.amount)) 
+			return false;
+		if(parseFloat(this.props.currTransaction.amount) <= 0)
+			return false;
+		return true;
+	}
+
 	componentDidMount() {
-		const date = format(new Date(), 'D MMM YYYY');
-		this.handleDateInput(date);
+		const date = moment();
+		this.props.setDate(date);
 	};
 
 	render() {
@@ -37,7 +78,7 @@ class AddTransactionScreen extends Component {
 				<View style={ styles.container }>
 					<TransactionCategoryButton 
 							onPressHandler={ this.handleCategorySelect }
-							value={ getOneCategory(this.props.currTransaction.category) } />
+							value={ this.props.currTransaction.category } />
 					<TransactionAmountInput 
 							onChangeHandler={ this.handleAmountInput } 
 							value={ this.props.currTransaction.amount } />
@@ -47,7 +88,7 @@ class AddTransactionScreen extends Component {
 					<TransactionNoteInput 
 							onChangeHandler={ this.handleNoteInput }
 							value={ this.props.currTransaction.note } />
-					<SaveTransactionButton onPressHandler={ this.handleSaveClick } />
+					<TransactionSaveButton onPressHandler={ this.handleSaveClick } />
 				</View>
 			</View>
 		);
@@ -72,18 +113,11 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignItems: 'center',
-		justifyContent: 'center',
-		padding: 15,
+		paddingTop: 64,
+		paddingRight: 16,
+		paddingBottom: 16,
+		paddingLeft: 16
 	},
-	toolbar: {
-		height: 50,
-		backgroundColor: '#FFFFFF'
-	},
-	title: {
-		marginBottom: 15,
-		fontSize: 24,
-		color: Colors.neutral
-	}
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddTransactionScreen); 

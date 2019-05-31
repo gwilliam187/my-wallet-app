@@ -1,13 +1,18 @@
-import { SET_CATEGORIES } from '../actions/actionTypes';
-import { getCategories } from '../../constants/Categories';
+import { GET_CATEGORIES_REQUEST, GET_CATEGORIES_SUCCESS, GET_CATEGORIES_FAILURE, 
+		SET_CATEGORIES } from '../actions/actionTypes';
 
-export default(state = defaultState, action) => {
+export default(state = { data: [] }, action) => {
 	switch(action.type) {
-		case SET_CATEGORIES:
-			return action.payload;
+		case GET_CATEGORIES_REQUEST:
+			console.log(GET_CATEGORIES_SUCCESS);
+			return { ...state, isFetching: true }
+		case GET_CATEGORIES_SUCCESS:
+			console.log(GET_CATEGORIES_SUCCESS);
+			return { ...state, isFetching: false, data: action.payload }
+		case GET_CATEGORIES_FAILURE:
+			console.log(GET_CATEGORIES_FAILURE);
+			return { ...state, isFetching: false, errorMessage: action.payload }
 		default:
 			return state;
 	}	
 }
-
-const defaultState = getCategories();
