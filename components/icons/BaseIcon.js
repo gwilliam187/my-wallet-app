@@ -9,6 +9,8 @@ export default class BaseIcon extends Component {
 			return <Icon.MaterialIcons name={ this.props.iconName } color={ this.props.color } size={ this.props.size } />
 		} else if(this.props.iconFamily === 'AntDesign') {
 			return <Icon.AntDesign name={ this.props.iconName } color={ this.props.color } size={ this.props.size } />			
-		} 
+		} else if(this.props.iconFamily === 'Ionicons') {
+			return <Icon.Ionicons name={ this.props.iconName } color={ this.props.color } size={ this.props.size } />						
+		}
 	}
 }

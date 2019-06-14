@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, } from 'react-native';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
 import { setAmount, setCategory, setDate, setNote } from '../redux/actions/currTransactionActions';
+import { editTransaction, deleteTransaction } from '../redux/actions/walletsActions';
+import { IoniconsHeaderButtons, Item } from '../components/headers/IoniconsHeaderButtons';
 import TransactionCategoryButton from '../components/transactionForm/TransactionCategoryButton';
 import TransactionAmountInput from '../components/transactionForm/TransactionAmountInput';
 import TransactionDateInput from '../components/transactionForm/TransactionDateInput';
@@ -12,6 +15,79 @@ import TransactionDeleteButton from '../components/transactionForm/TransactionDe
 import Colors from '../constants/Colors';
 
 class EditTransactionScreen extends Component {
+	static navigationOptions = ({ navigation }) => ({
+	  headerRight: (
+	    <IoniconsHeaderButtons>
+	      <Item 
+	      		onPress={ () => navigation.navigate('Wallets') }
+	      		title="wallets" 
+	      		iconName="md-trash" />
+	    </IoniconsHeaderButtons>
+	  ),
+	});
+
+	handleAmountInput = val => this.props.setAmount(val);
+	handleDateInput = val => {
+		const parsed = moment(val, 'D MMM YYYY');
+		this.props.setDate(parsed);
+	}
+	handleNoteInput = val => this.props.setNote(val);
+
+	handleCategorySelect = () => {
+		this.props.navigation.navigate('SelectCategory');
+	};
+
+	handleSaveClick = () => {
+		if(this.checkIfComplete()) {
+			if(this.checkIfValid()) {
+				const formattedTransaction = {
+					_id: this.props.currTransaction._id,
+					amount: this.props.currTransaction.category.type === 'expense' ? 
+							-parseFloat(this.props.currTransaction.amount) : 
+							parseFloat(this.props.currTransaction.amount),
+					date: moment(this.props.currTransaction.date),
+					note: this.props.currTransaction.note || "",
+					category: this.props.currTransaction.category,
+				};
+
+				this.props.editTransaction(formattedTransaction, this.props.currWallet);
+				this.props.navigation.goBack();
+			} else {
+				ToastAndroid.show('Invalid input', ToastAndroid.SHORT)
+			}
+		} else {
+			ToastAndroid.show('Please input empty data', ToastAndroid.SHORT)
+		}
+	};
+
+	checkIfComplete = () => {
+		if(this.props.currTransaction.amount && 
+				this.props.currTransaction.date &&
+				this.props.currTransaction.category) {
+			return true;
+		} else {
+			return false
+		}
+	};
+
+	checkIfValid = () => {
+		if(!isFinite(this.props.currTransaction.amount)) 
+			return false;
+		if(parseFloat(this.props.currTransaction.amount) <= 0)
+			return false;
+		return true;
+	}
+
+	handleDeleteClick = () => {
+		this.props.deleteTransaction(this.props.currTransaction, this.props.currWallet);
+		this.props.navigation.goBack();
+	};
+
+	componentDidMount() {
+		console.log('this.props.currTrans');
+		console.log(this.props.currTransaction);
+	}
+
 	render() {
 		return (
 			<View style={ styles.root }>
@@ -21,6 +97,7 @@ class EditTransactionScreen extends Component {
 							value={ this.props.currTransaction.category } />
 					<TransactionAmountInput 
 							onChangeHandler={ this.handleAmountInput } 
+							currency={ this.props.currWallet.currency } 
 							value={ this.props.currTransaction.amount.toString() } />
 					<TransactionDateInput 
 							onChangeHandler={ this.handleDateInput }
@@ -44,12 +121,14 @@ class EditTransactionScreen extends Component {
 
 const mapStateToProps = state => {
 	return { 
-		currTransaction: state.currTransaction 
+		currTransaction: state.currTransaction,
+		currWallet: state.currWallet, 
 	};
 };
 
 const mapDispatchToProps = {
-	setAmount, setCategory, setDate, setNote
+	setAmount, setCategory, setDate, setNote, 
+	editTransaction, deleteTransaction,
 };
 
 const styles = StyleSheet.create({

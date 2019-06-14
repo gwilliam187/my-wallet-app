@@ -2,7 +2,6 @@ import { GET_CATEGORIES_REQUEST, GET_CATEGORIES_SUCCESS, GET_CATEGORIES_FAILURE 
 import { readCategories } from '../../sqlite';
 
 export const getCategories = () => async dispatch => {
-	console.log('getCategories');
 	dispatch({ type: GET_CATEGORIES_REQUEST });
 	try {
 		const categories = await readCategories();

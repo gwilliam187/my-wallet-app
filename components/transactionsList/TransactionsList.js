@@ -1,67 +1,94 @@
 import React, { Component } from 'react';
 import { View, Text, SectionList, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import moment from 'moment';
+import { Icon } from 'expo';
 
 import TransactionsListHeader from './TransactionsListHeader';
 import TransactionsListItem from './TransactionsListItem';
+import Colors from '../../constants/Colors';
 
 class TransactionsList extends Component {
 	mapTransactionsToSections = () => {
 		let sections = [];
 
-		this.props.transactions.forEach(transaction => {
-		  const i = sections.findIndex(section => section.date === transaction.date)
+		const sortedTransactions = this.props.transactions.sort((curr, next) => {
+			return moment(next.date).format('YYYYMMDDHHmmss') - 
+					moment(curr.date).format('YYYYMMDDHHmmss');
+		});
+
+		sortedTransactions.forEach(transaction => {
+		  const i = sections.findIndex(section => moment(section.date).format('YYYY-MM-DD') === 
+		  		moment(transaction.date).format('YYYY-MM-DD'))
 		  if(i !== -1 && sections.length > 0) {
-		  	transaction.category.type === 'expense' ? 
-			  		sections[i].sum -= transaction.amount :
-			  		sections[i].sum += transaction.amount;
+			  sections[i].sum += transaction.amount;
 		    sections[i].data.push(transaction);
 		  } else {
 		    const newObj = {
 		      date: transaction.date,
-		      sum: transaction.category.type === 'expense' ? -transaction.amount : +transaction.amount,
-		      data: [transaction]
+		      sum: transaction.amount,
+		      data: [transaction],
 		    }
 		    sections.push(newObj)
 		  }
 		});
 
 		return sections;
-	}
+	};
+
+	renderItem = ({ item, index, section }) => (
+		<TransactionsListItem 
+				item={ item } 
+				onPressHandler={ this.props.itemOnPressHandler } />
+	);
+
+	renderSectionHeader = ({ section }) => (
+		<TransactionsListHeader section={ section } />
+	);
+
+	keyExtractor = (item) => item._id;
 
 	render() {
 		if(this.props.transactions.length > 0) {
 			return (
-				<SectionList 
-						renderItem={({ item, index, section }) => <TransactionsListItem item={ item } 
-								onPressHandler={ this.props.itemOnPressHandler } /> }
-						renderSectionHeader={({ section }) => <TransactionsListHeader section={ section } />}
+				<SectionList
 						sections={ this.mapTransactionsToSections() }
-						keyExtractor={ item => item._id }
+						renderItem={ this.renderItem }
+						renderSectionHeader={ this.renderSectionHeader }
+						keyExtractor={ this.keyExtractor }
+						contentContainerStyle={{ paddingBottom: 72 }}
 						style={ styles.list } />
 			);
 		} else {
-			return <Text>Empty</Text>
+			return (
+				<View style={ styles.emptyList }>
+					<Icon.MaterialIcons 
+							name='library-books'
+							color={ Colors.neutralFaded }
+							size={ 96 } />
+					<Text style={ styles.emptyText }>No Transactions</Text>
+				</View>
+			);
 		}
 	}
 }
 
-const mapStateToProps = state => {
-	return {};
-};
-
-const mapDispatchToProps = {
-
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(TransactionsList);
+export default TransactionsList;
 
 const styles = StyleSheet.create({
 	list: {
 		flex: 1,
 		alignSelf: 'stretch',
-		paddingLeft: 16,
-		paddingRight: 16,
 		marginTop: 8,
-	}
-})
+	},
+	emptyList: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		alignSelf: 'stretch',
+		marginTop: 8,
+	},
+	emptyText: {
+		color: Colors.neutralFaded,
+	},
+});

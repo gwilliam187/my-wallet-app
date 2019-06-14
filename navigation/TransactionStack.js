@@ -4,6 +4,7 @@ import TransactionsScreen from '../screens/TransactionsScreen';
 import AddTransactionScreen from '../screens/AddTransactionScreen';
 import SelectCategoryScreen from '../screens/SelectCategoryScreen';
 import EditTransactionScreen from '../screens/EditTransactionScreen';
+import WalletsScreen from '../screens/WalletsScreen';
 
 const RouteConfigs = {
 	Transactions: {
@@ -30,6 +31,12 @@ const RouteConfigs = {
 			title: 'Edit Transaction',
 		}),
 	},
+	Wallets: {
+		screen: WalletsScreen,
+		navigationOptions: ({ navigation }) => ({
+			title: 'Wallets',
+		}),
+	},
 };
 
 const StackNavigatorConfig = {
@@ -41,10 +48,10 @@ TransactionStack.navigationOptions = ({ navigation }) => {
   let tabBarVisible;
   if(navigation.state.routes.length > 1) {
     navigation.state.routes.map(route => {
-      if (route.routeName === "EditTransaction") {
-        tabBarVisible = false;
-      } else {
+      if (route.routeName === 'Transactions') {
         tabBarVisible = true;
+      } else {
+        tabBarVisible = false;
       }
     });
   }

@@ -25,5 +25,9 @@
     "ios": {
       "supportsTablet": true
     },
+    "android": {
+      "package": "com.gwilliam187.my_wallet_app"
+    },
+    "description": ""
   }
 }

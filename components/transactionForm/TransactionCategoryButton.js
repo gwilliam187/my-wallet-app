@@ -3,6 +3,7 @@ import { View, Text, TouchableNativeFeedback, StyleSheet } from 'react-native';
 import { Icon } from 'expo';
 
 // import CategoryIcon from '../categories/CategoryIcon';
+import BaseIcon from '../icons/BaseIcon';
 import CategoryIcon from '../icons/CategoryIcon';
 import Colors from '../../constants/Colors';
 
@@ -13,25 +14,26 @@ export default class TransactionCategoryButton extends Component {
 					onPress={ this.props.onPressHandler }
 					useForeground={ true }>
 				<View style={ styles.unselectedButton }>
-					<CategoryIcon 
-							category={ null } 
-							color={ Colors.neutral }
-							size={ 32 } />
+					<Icon.AntDesign 
+						name='question'
+						color={ Colors.neutral }
+						size={ 24 } />
 					<Text style={ styles.defaultButtonText }>Select Category</Text>
 				</View>
 			</TouchableNativeFeedback>
 		);
 	}
 
-	renderSelectedButton() {
-		const backgroundColor = this.props.value.color + '80';
-		
+	renderSelectedButton() {		
 		return (
 			<TouchableNativeFeedback 
 					onPress={ this.props.onPressHandler }
 					useForeground={ true }>
-				<View style={ [styles.selectedButton, { backgroundColor: backgroundColor }] }>
-					<CategoryIcon category={ this.props.value } />
+				<View style={ styles.selectedButton }>
+					<CategoryIcon 
+							category={ this.props.value } 
+							color={ this.props.value.color }
+							size={ 24 } />
 					<Text style={ styles.selectedButtonText }>{ this.props.value._id }</Text>
 				</View>
 			</TouchableNativeFeedback>
@@ -49,33 +51,36 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignSelf: 'stretch',
 		alignItems: 'center',
-		paddingTop: 15,
+		paddingTop: 16,
 		paddingRight: 20,
-		paddingBottom: 15,
+		paddingBottom: 16,
 		paddingLeft: 20,
 		marginBottom: 8,
 		borderRadius: 8,
-		backgroundColor: '#FFFFFF'
+		backgroundColor: '#FFF',
+		elevation: 2,
 	},
 	selectedButton: {
 		flexDirection: 'row',
 		alignSelf: 'stretch',
 		alignItems: 'center',
-		paddingTop: 15,
+		paddingTop: 16,
 		paddingRight: 20,
-		paddingBottom: 15,
+		paddingBottom: 16,
 		paddingLeft: 20,
 		marginBottom: 8,
 		borderRadius: 8,
+		backgroundColor: '#FFF',
+		elevation: 2,
 	},
 	defaultButtonText: {
-		marginLeft: 16,
+		marginLeft: 20,
 		color: Colors.neutralFaded,
-		fontSize: 24,
+		fontSize: 20,
 	},
 	selectedButtonText: {
-		marginLeft: 16,
-		fontSize: 24,
-		color: '#FFFFFF',
+		marginLeft: 20,
+		fontSize: 20,
+		color: Colors.neutral,
 	},
 });

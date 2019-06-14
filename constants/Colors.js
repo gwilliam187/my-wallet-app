@@ -5,6 +5,8 @@ const error = '#C23842';
 const neutral = '#3C3C3C';
 const neutralSlightFaded = '#3C3C3C80';
 const neutralFaded = '#3C3C3C50';
+const froly = '#F38181';
+const kournikova = '#FFDE7D';
 
 export default {
   primary,
@@ -13,6 +15,8 @@ export default {
   neutral,
   neutralSlightFaded,
   neutralFaded,
+  froly,
+  kournikova,
   tabIconDefault: '#ccc',
   tabIconSelected: primary,
   tabBar: '#fefefe',

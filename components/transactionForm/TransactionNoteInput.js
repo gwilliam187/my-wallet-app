@@ -22,7 +22,7 @@ export default class TransactionNoteInput extends Component {
 						onChangeText={ val => this.props.onChangeHandler(val) }
 						value={ this.props.value }
 						placeholder='Write note'
-						multiline={ true }
+						multiline={ false }
 						style={ styles.input } />
 			</View>
 		);

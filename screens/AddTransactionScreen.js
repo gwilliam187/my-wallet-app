@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StatusBar, TouchableWithoutFeedback, ToastAndroid, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import moment from 'moment';
+import uuidv1 from 'uuid/v1';
 
 import TransactionCategoryButton from '../components/transactionForm/TransactionCategoryButton';
 import TransactionAmountInput from '../components/transactionForm/TransactionAmountInput';
@@ -9,8 +10,8 @@ import TransactionDateInput from '../components/transactionForm/TransactionDateI
 import TransactionNoteInput from '../components/transactionForm/TransactionNoteInput';
 import TransactionSaveButton from '../components/transactionForm/TransactionSaveButton';
 import { setAmount, setCategory, setDate, setNote } from '../redux/actions/currTransactionActions';
-import { addTransaction } from '../redux/actions/transactionsActions';
-import { createTransaction } from '../sqlite';
+// import { addTransaction } from '../redux/actions/transactionsActions';
+import { addTransaction } from '../redux/actions/walletsActions';
 import Colors from '../constants/Colors';
 
 class AddTransactionScreen extends Component {
@@ -25,22 +26,21 @@ class AddTransactionScreen extends Component {
 		this.props.navigation.navigate('SelectCategory');
 	};
 
-	handleSaveClick = async () => {
+	handleSaveClick = () => {
 		if(this.checkIfComplete()) {
 			if(this.checkIfValid()) {
 				const formattedTransaction = {
-					amount: parseFloat(this.props.currTransaction.amount),
-					date: moment(this.props.currTransaction.date).format('YYYY-MM-DD'),
+					_id: uuidv1(),
+					amount: this.props.currTransaction.category.type === 'expense' ? 
+							-parseFloat(this.props.currTransaction.amount) : 
+							parseFloat(this.props.currTransaction.amount),
+					date: moment(this.props.currTransaction.date),
 					note: this.props.currTransaction.note || "",
-					categoryId: this.props.currTransaction.category.id 
+					category: this.props.currTransaction.category,
 				};
 
-				const promise = await createTransaction(formattedTransaction);
-				if(promise) {
-					console.log(promise);
-				} else {
-					console.log(promise);
-				}
+				this.props.addTransaction(formattedTransaction, this.props.currWallet);
+				this.props.navigation.navigate('Transactions');
 			} else {
 				ToastAndroid.show('Invalid input', ToastAndroid.SHORT)
 			}
@@ -80,7 +80,8 @@ class AddTransactionScreen extends Component {
 							onPressHandler={ this.handleCategorySelect }
 							value={ this.props.currTransaction.category } />
 					<TransactionAmountInput 
-							onChangeHandler={ this.handleAmountInput } 
+							onChangeHandler={ this.handleAmountInput }
+							currency={ this.props.currWallet.currency } 
 							value={ this.props.currTransaction.amount } />
 					<TransactionDateInput 
 							onChangeHandler={ this.handleDateInput }
@@ -88,7 +89,11 @@ class AddTransactionScreen extends Component {
 					<TransactionNoteInput 
 							onChangeHandler={ this.handleNoteInput }
 							value={ this.props.currTransaction.note } />
-					<TransactionSaveButton onPressHandler={ this.handleSaveClick } />
+				</View>
+				<View style={ styles.footer }>
+					<View style={ styles.saveButtonWrapper } >
+						<TransactionSaveButton onPressHandler={ this.handleSaveClick } />
+					</View>
 				</View>
 			</View>
 		);
@@ -97,7 +102,8 @@ class AddTransactionScreen extends Component {
 
 const mapStateToProps = state => {
 	return {
-		currTransaction: state.currTransaction
+		currTransaction: state.currTransaction,
+		currWallet: state.currWallet,
 	};
 };
 
@@ -113,10 +119,23 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		alignItems: 'center',
-		paddingTop: 64,
+		justifyContent: 'center',
+		paddingTop: 16,
 		paddingRight: 16,
 		paddingBottom: 16,
 		paddingLeft: 16
+	},
+	footer: {
+		flexDirection: 'row',
+		paddingRight: 16,
+		paddingLeft: 16,
+		backgroundColor: '#FFFFFF',
+	},
+	saveButtonWrapper: {
+		flex: 1,
+		flexDirection: 'column',
+		alignItems: 'stretch',
+		marginRight: 8,
 	},
 });
 

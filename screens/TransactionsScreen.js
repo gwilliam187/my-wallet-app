@@ -1,62 +1,90 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View, } from 'react-native';
+import { Button, StyleSheet, Text, View, } from 'react-native';
 import { FAB } from 'react-native-paper';
 import { connect } from 'react-redux';
+import moment from 'moment';
 
+import TransactionsMonthPicker from '../components/TransactionsMonthPicker';
 import TransactionsList from '../components/transactionsList/TransactionsList';
-import { getTransactions } from '../redux/actions/transactionsActions';
+import TransactionsTitle from '../components/headers/TransactionsTitle';
+import { IoniconsHeaderButtons, Item } from '../components/headers/IoniconsHeaderButtons';
+import { addTransactions } from '../redux/actions/transactionsActions';
 import { getCategories } from '../redux/actions/categoriesActions';
 import { resetCurrTransaction } from '../redux/actions/currTransactionActions';
 import Colors from '../constants/Colors';
 
 class TransactionsScreen extends Component {
+	static navigationOptions = ({ navigation }) => ({
+		headerTitle: (<TransactionsTitle />),
+	  headerRight: (
+	    <IoniconsHeaderButtons>
+	      <Item 
+	      		onPress={ () => navigation.navigate('Wallets') }
+	      		title="wallets" 
+	      		iconName="md-wallet" />
+	    </IoniconsHeaderButtons>
+	  ),
+	});
+
 	fabOnPressHandler = () => {
 		this.props.resetCurrTransaction();
-		this.props.navigation.navigate('AddTransaction')
+		this.props.navigation.navigate('AddTransaction');
 	};
 
 	itemOnPressHandler = () => {
 		this.props.navigation.navigate('EditTransaction');
 	};
 
-	componentDidMount() {
-		this.props.navigation.addListener('willFocus', async () => {
-			this.props.getTransactions();
-		})
-	}
+	getCurrMonthTransactions = () => {
+		const currMonthTransactions = this.props.wallets
+			.find(wallet => wallet._id === this.props.currWallet._id)
+			.transactions
+			.filter(transaction => moment(transaction.date).format('MMMM YYYY') ===
+					this.props.transactionsCurrMonth.format('MMMM YYYY')) 
+			|| []; 
 
-	renderLoading() {
-		return <ActivityIndicator size={ 64 } color={ Colors.primary } />;
-	}
+		return currMonthTransactions;
+	};
 
 	renderTransactionList() {
 		return <TransactionsList 
-				transactions={ this.props.transactions.data } 
+				transactions={ this.getCurrMonthTransactions() } 
 				itemOnPressHandler={ this.itemOnPressHandler } />;
 	}
 
 	render() {
-		return (
-			<View style={ styles.root }>
-				<View style={ styles.container }>
-					{ this.props.transactions.isFetching ? this.renderLoading() : this.renderTransactionList() }
-					<FAB 
-							onPress={ this.fabOnPressHandler }
-							icon='add'
-							style={ styles.fab } />
+		if(Object.entries(this.props.currWallet).length > 0) {
+			return (
+				<View style={ styles.root }>
+					<View style={ styles.container }>
+						<TransactionsMonthPicker />
+						{ this.renderTransactionList() }
+						<FAB 
+								onPress={ this.fabOnPressHandler }
+								icon='add'
+								style={ styles.fab } />
+					</View>
 				</View>
-			</View>
-		);
+			);
+		} else {
+			return (
+				<View style={ styles.noWalletWrapper }>
+					<Text style={ styles.noWalletText }>Please Select a Wallet</Text>
+				</View>
+			);
+		}
 	}
 }
 
 const mapStateToProps = state => {
 	return {
-		transactions: state.transactions
+		wallets: state.wallets,
+		currWallet: state.currWallet,
+		transactionsCurrMonth: state.transactionsCurrMonth,
 	};
 };
 
-const mapDispatchToProps = { getCategories, getTransactions, resetCurrTransaction };
+const mapDispatchToProps = { resetCurrTransaction };
 
 const styles = StyleSheet.create({
 	root: {
@@ -74,6 +102,16 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: Colors.primary
+	},
+	noWalletWrapper: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
+		alignSelf: 'stretch',
+	},
+	noWalletText: {
+		fontSize: 16,
+		color: Colors.neutralFaded,
 	},
 });
 

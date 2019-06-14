@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View, } from 'react-native';
 import { connect } from 'react-redux';
 
-import CategoryButton from '../components/categories/CategoryButton';
-import { getCategories } from '../redux/actions/categoriesActions';
+// import CategoryButton from '../components/categoriesList/CategoryButton';
+import CategoriesList from '../components/categoriesList/CategoriesList';
 import { setCategory } from '../redux/actions/currTransactionActions';
 import Colors from '../constants/Colors';
 
@@ -13,33 +13,11 @@ class SelectCategoryScreen extends Component {
 		this.props.navigation.goBack();
 	};
 
-	async componentDidMount() {
-		this.props.navigation.addListener('willFocus', async () => {
-			this.props.getCategories();
-		})
-	}
-
-	renderLoading() {
-		return <ActivityIndicator size={ 64 } color={ Colors.primary } />;
-	}
-
-	renderList() {
-		const categories = this.props.categories.data;
-		return categories.map(category => {
-			return (
-				<CategoryButton 
-						onPressHandler={ this.handleCategorySelect } 
-						category={ category } 
-						key={ category._id } />
-			);
-		})
-	}
-
 	render() {
 		return (
 			<View style={ styles.root }>
 				<View style={ styles.container }>
-					{ this.props.categories.isFetching ? this.renderLoading() : this.renderList() }
+					<CategoriesList itemOnPress={ this.handleCategorySelect } />
 				</View>
 			</View>
 		);
@@ -53,7 +31,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = {
-	getCategories, setCategory
+	setCategory
 };
 
 const styles = StyleSheet.create({
@@ -65,7 +43,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center',
-		padding: 15,
 	}
 });
 

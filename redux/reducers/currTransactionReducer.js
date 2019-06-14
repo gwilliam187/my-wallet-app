@@ -1,8 +1,16 @@
-import { SET_CURRTRANSACTION_AMOUNT, SET_CURRTRANSACTION_CATEGORY, 
-		SET_CURRTRANSACTION_DATE, SET_CURRTRANSACTION_NOTE, RESET_CURRTRANSACTION } from '../actions/actionTypes';
+import { 
+	SET_CURRTRANSACTION_ID, 
+	SET_CURRTRANSACTION_AMOUNT, 
+	SET_CURRTRANSACTION_CATEGORY, 
+	SET_CURRTRANSACTION_DATE, 
+	SET_CURRTRANSACTION_NOTE, 
+	RESET_CURRTRANSACTION 
+} from '../actions/actionTypes';
 
 export default(state = defaultState, action) => {
 	switch(action.type) {
+		case SET_CURRTRANSACTION_ID:
+			return { ...state, _id: action.payload };
 		case SET_CURRTRANSACTION_AMOUNT:
 			return { ...state, amount: action.payload };
 		case SET_CURRTRANSACTION_CATEGORY:
@@ -19,6 +27,7 @@ export default(state = defaultState, action) => {
 };
 
 const defaultState = {
+	_id: null,
 	amount: null,
 	category: null,
 	date: null,

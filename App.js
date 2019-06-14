@@ -1,15 +1,18 @@
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon, SQLite } from 'expo';
-import { createStore, applyMiddleware } from 'redux';
+// import { createStore, applyMiddleware } from 'redux';
 import { Provider, connect } from 'react-redux';
-import thunk from 'redux-thunk';
+// import thunk from 'redux-thunk';
+import { PersistGate } from 'redux-persist/lib/integration/react';
 
 import AppNavigator from './navigation/AppNavigator';
 import { initialize } from './sqlite';
-import reducers from './redux/reducers';
+// import reducers from './redux/reducers';
+import { store, persistor } from './redux/store';
+import Colors from './constants/Colors';
 
-const store = createStore(reducers, applyMiddleware(thunk))
+// const store = createStore(reducers, applyMiddleware(thunk))
 
 export default class App extends React.Component {
   state = {
@@ -28,10 +31,12 @@ export default class App extends React.Component {
     } else {
       return (
         <Provider store={ store }>
-          <View style={styles.container}>
-            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-            <AppNavigator />
-          </View>
+          <PersistGate loading={ <ActivityIndicator size={ 64 } color={ Colors.primary } /> } persistor={ persistor }>
+            <View style={styles.container}>
+              {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+              <AppNavigator />
+            </View>
+           </PersistGate>
          </Provider>
       );
     }
@@ -45,12 +50,16 @@ export default class App extends React.Component {
       ]),
       Font.loadAsync({
         // This is the font that we are using for our tab bar
+        ...Icon.AntDesign.font,
+        ...Icon.Entypo.font,
         ...Icon.Ionicons.font,
+        ...Icon.MaterialCommunityIcons.font,
+        ...Icon.MaterialIcons.font,
         // We include SpaceMono because we use it in HomeScreen.js. Feel free
         // to remove this if you are not using it in your app
         'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
       }),
-      initialize(),
+      // initialize(),
     ]);
   };
 

@@ -1,38 +1,46 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 import moment from 'moment';
 
 import CurrencyIcon from '../../components/icons/CurrencyIcon';
+import CurrencyText from '../CurrencyText';
 import Colors from '../../constants/Colors';
 
-export default class TransactionsListHeader extends Component {
-	renderSum() {
-		return ( 
-			<View style={ styles.sumWrapper }>
-				<Text style={ styles.operatorText }>{ this.props.section.sum < 0 ? '- ' : '+ ' }</Text>
-				<CurrencyIcon currency='euro' color={ Colors.neutral } size={ 20 }/>
-				<Text style={ styles.sumText }>{ Math.abs(this.props.section.sum) }</Text>
-			</View>
-		);
-	}
-
+class TransactionsListHeader extends Component {
 	render() {
 		return (
 			<View style={ styles.headerWrapper }>
 				<Text style={ styles.dateText }>{ moment(this.props.section.date).format('D MMM YYYY') }</Text>
-				{ this.renderSum() }
+				<View style={ styles.sumWrapper }>
+					<CurrencyText
+							amount={ this.props.section.sum }
+							currency={ this.props.currWallet.currency }
+							color={ Colors.neutral }
+							size={ 20 } />
+				</View>
 			</View>
 		);
 	}
 }
 
+const mapStateToProps = state => ({
+	currWallet: state.currWallet,
+});
+
+const mapDispatchToProps = {
+
+};
+
 const styles = StyleSheet.create({
 	headerWrapper: {
 		flexDirection: 'row',
 		alignItems: 'flex-end',
-		paddingRight: 16,
+		// paddingRight: 16,
 		marginTop: 12,
+		marginRight: 20,
 		marginBottom: 8,
+		marginLeft: 20,
 	},
 	dateText: {
 		color: Colors.neutral,
@@ -54,3 +62,5 @@ const styles = StyleSheet.create({
 		fontWeight: 'bold',
 	},
 });
+
+export default connect(mapStateToProps, mapDispatchToProps)(TransactionsListHeader);

@@ -8,6 +8,7 @@ import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 import TransactionStack from './TransactionStack';
+import BudgetStack from './BudgetStack';
 
 import AddTransactionScreen from '../screens/AddTransactionScreen';
 import SelectCategoryScreen from '../screens/SelectCategoryScreen';
@@ -19,12 +20,12 @@ const RouteConfigs = {
 		navigationOptions: {
 			tabBarLabel: 'Transactions',
 			tabBarIcon: ({ focused, horizontal, tintColor }) => (
-				<Icon.MaterialCommunityIcons name='wallet' color={ tintColor } size={ 24 } />
+				<Icon.MaterialIcons name='attach-money' color={ tintColor } size={ 24 } />
 			)
 		}
 	},
 	Budget: { 
-		screen: AddTransactionScreen,
+		screen: BudgetStack,
 		navigationOptions: {
 			tabBarLabel: 'Budget',
 			tabBarIcon: ({ focused, horizontal, tintColor }) => (

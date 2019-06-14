@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { Icon } from 'expo';
 
+import CurrencyIcon from '../icons/CurrencyIcon';
 import Colors from '../../constants/Colors';
 
 export default class TransactionAmountInput extends Component {
@@ -9,10 +10,10 @@ export default class TransactionAmountInput extends Component {
 		return (
 			<View style={ styles.myInputWrapper }>
 				<View style={{ marginRight: 20 }}>
-					<Icon.MaterialCommunityIcons 
-							name='currency-eur' 
-							color={ Colors.primary } 
-							size={ 28 } />
+					<CurrencyIcon 
+							currency={ this.props.currency }
+							color={ Colors.primary }
+							size={ 24 }/>
 				</View>
 				<TextInput
 						onChangeText={ val => this.props.onChangeHandler(val) }
@@ -29,17 +30,18 @@ const styles = StyleSheet.create({
 	myInputWrapper: {
 		flexDirection: 'row',
 		alignItems: 'center',
-		paddingTop: 15,
+		paddingTop: 16,
 		paddingRight: 20,
-		paddingBottom: 15,
+		paddingBottom: 16,
 		paddingLeft: 20,
 		marginBottom: 8,
 		borderRadius: 8,
 		backgroundColor: '#FFFFFF',
+		elevation: 1,
 	},
 	myInput: {
 		flex: 1,
-		fontSize: 24,
+		fontSize: 20,
 		color: Colors.neutral
 	}
 })
