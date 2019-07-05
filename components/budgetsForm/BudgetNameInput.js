@@ -12,14 +12,14 @@ class BudgetNameInput extends Component {
   render() {
     return (
 			<View style={ styles.inputWrapper }>
-				<View style={{ marginRight: 28 }}>
+				<View style={{ marginRight: 24 }}>
 					<Icon.MaterialCommunityIcons
 							name='text-short'
 							color={ Colors.neutral }
 							size={ 20 } />
 				</View>
 				<TextInput
-						onChangeText={ val => this.props.onChangeHandler(val) }
+						onChangeText={ val => this.props.onChange(val) }
 						value={ this.props.value }
 						placeholder='Budget Name'
 						style={ styles.input } />

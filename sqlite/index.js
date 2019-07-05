@@ -9,15 +9,6 @@ export const initialize = async () => {
 	const groceryQuery = `INSERT INTO category 
 		VALUES('Groceries', 'expense', '#FFC600', 'MaterialIcons', 'shopping-cart')`;
 
-	const trans1 = `INSERT INTO my_transaction(amount, date, note, category_id) 
-			VALUES(100, '2019-05-15', 'Really good food', 'Food')`;
-
-	const trans2 = `INSERT INTO my_transaction(amount, date, note, category_id) 
-			VALUES(20, '2019-05-15', '', 'Groceries')`;
-
-	const trans3 = `INSERT INTO my_transaction(amount, date, note, category_id) 
-			VALUES(50, '2019-05-14', null, 'Food')`;
-
 	// db.transaction(tx => { 
 		// tx.executeSql(`DROP TABLE my_transaction`)
 		// tx.executeSql(`DROP TABLE category`)

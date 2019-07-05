@@ -2,6 +2,7 @@ import { createStackNavigator } from 'react-navigation';
 
 import BudgetsScreen from '../screens/budgets/BudgetsScreen';
 import AddBudgetScreen from '../screens/budgets/AddBudgetScreen';
+import SelectCategoriesScreen from '../screens/budgets/SelectCategoriesScreen';
 import SelectRangeScreen from '../screens/budgets/SelectRangeScreen';
 
 const RouteConfigs = {
@@ -14,13 +15,19 @@ const RouteConfigs = {
   AddBudget: {
     screen: AddBudgetScreen,
     navigationOptions: ({ navigation }) => ({
-      title: 'Add Budget'
+      title: 'Add Budget',
+    }),
+  },
+  SelectCategories: {
+    screen: SelectCategoriesScreen,
+    navigationOptions: ({ navigation }) => ({
+      title: 'Select Categories',
     }),
   },
   SelectRange: {
     screen: SelectRangeScreen,
     navigationOptions: ({ navigation }) => ({
-      title: 'Select Range'
+      title: 'Select Range',
     }),
   },
 };

@@ -5,6 +5,7 @@ import {
   TouchableNativeFeedback,
   View,
 } from 'react-native';
+import { connect } from 'react-redux';
 import { Icon } from 'expo';
 
 import CategoryIcon from '../../components/icons/CategoryIcon';
@@ -14,7 +15,7 @@ class BudgetCategoryButton extends Component {
 	renderUnselectedButton() {
 		return (
 			<TouchableNativeFeedback 
-					onPress={ this.props.onPressHandler }
+					onPress={ this.props.onPress }
 					useForeground={ true }>
 				<View style={ styles.unselectedButton }>
 					<Icon.AntDesign 
@@ -28,7 +29,19 @@ class BudgetCategoryButton extends Component {
 	}
 
 	renderOneSelectedButton() {
-
+		return (
+			<TouchableNativeFeedback 
+					onPress={ this.props.onPress }
+					useForeground={ true }>
+				<View style={ styles.unselectedButton }>
+					<Icon.AntDesign 
+						name='question'
+						color={ Colors.neutral }
+						size={ 24 } />
+					<Text style={ styles.unselectedButtonText }>Select Categories</Text>
+				</View>
+			</TouchableNativeFeedback>
+		);
 	}
 
 	renderMultipleSelectedButton() {
@@ -58,7 +71,13 @@ class BudgetCategoryButton extends Component {
 	}
 
   render() {
-    return this.renderUnselectedButton();
+  	if(this.props.currBudget.categories.length === 0) {
+    	return this.renderUnselectedButton();
+    } else if(this.props.currBudget.categories.length === 1) {
+    	return this.renderOneSelectedButton();
+    } else if(this.props.currBudget.categories.length > 1) {
+    	return this.renderMultipleSelectedButton();
+    }
   }
 }
 
@@ -108,4 +127,12 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default BudgetCategoryButton;
+const mapStateToProps = state => ({
+	currBudget: state.currBudget,
+});
+
+const mapDispatchToProps = {
+
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(BudgetCategoryButton);

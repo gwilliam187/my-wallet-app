@@ -18,6 +18,7 @@ class BudgetsScreen extends Component {
   };
 
   getCurrWalletBudgets = () => {
+    console.log(this.props.budgets);
     return this.props.budgets.filter(budget => budget.wallet._id === this.props.currWallet._id);
   }
 

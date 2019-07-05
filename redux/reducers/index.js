@@ -6,6 +6,8 @@ import currTransactionReducer from './currTransactionReducer';
 import categoriesReducer from './categoriesReducer';
 import transactionsCurrMonthReducer from './transactionsCurrMonthReducer';
 import budgetsReducer from './budgetsReducer';
+import currBudgetReducer from './currBudgetReducer';
+import categoriesCheckboxReducer from './categoriesCheckboxReducer';
 
 export default combineReducers({
 	wallets: walletsReducer,
@@ -14,4 +16,6 @@ export default combineReducers({
 	categories: categoriesReducer,
 	currTransaction: currTransactionReducer,
 	budgets: budgetsReducer,
+	currBudget: currBudgetReducer,
+	categoriesCheckbox: categoriesCheckboxReducer,
 });

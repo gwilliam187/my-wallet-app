@@ -6,6 +6,7 @@ import {
   View,
 } from 'react-native';
 import { Checkbox } from 'react-native-paper';
+import moment from 'moment';
 
 import Colors from '../../constants/Colors';
 
@@ -14,10 +15,14 @@ class BudgetRangeItem extends Component {
 		checked: false,
 	};
 
+	onPress = () => {
+		this.props.onPress(this.props.startDate, this.props.endDate, this.props.type, this.state.checked);
+	}
+
   render() {
     return (
       <TouchableNativeFeedback
-      		onPress={() => { this.props.onPress }}
+      		onPress={ this.onPress }
       		useForeground={ true }>
       	<View style={ styles.itemWrapper }>
       		<Text style={ styles.itemName }>{ this.props.title }</Text>

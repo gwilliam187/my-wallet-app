@@ -10,8 +10,8 @@ import { Icon } from 'expo';
 import Colors from '../../constants/Colors';
 
 class BudgetRangeButton extends Component {
-  render() {
-    return (
+	renderUnselectedButton() {
+		return (
 			<TouchableNativeFeedback 
 					onPress={ this.props.onPress }
 					useForeground={ true }>
@@ -24,6 +24,39 @@ class BudgetRangeButton extends Component {
 				</View>
 			</TouchableNativeFeedback>
 		);
+	}
+
+	renderSelectedButton() {
+		let text = this.props.type === 'monthly' ? 'This month' : null;
+		let subText = '';
+		if(this.props.type !== 'custom') {
+			subText = this.props.repeat ? '(Repeating)' : subText;
+		} else {
+			subText = 'asdf'
+		}
+
+		return (
+			<TouchableNativeFeedback 
+					onPress={ this.props.onPress }
+					useForeground={ true }>
+				<View style={ styles.selectedButton }>
+					<Icon.MaterialCommunityIcons 
+						name='calendar'
+						color={ Colors.neutral }
+						size={ 24 } />
+					<Text style={ styles.selectedButtonText }>{ text }</Text>
+					<Text style={ styles.selectedButtonSubtext }>{ subText }</Text>
+				</View>
+			</TouchableNativeFeedback>
+		);
+	}
+
+  render() {
+    if(this.props.type) {
+    	return this.renderSelectedButton();
+    } else {
+    	return this.renderUnselectedButton();
+    }
   }
 }
 
@@ -45,6 +78,28 @@ const styles = StyleSheet.create({
 		marginLeft: 20,
 		color: Colors.neutralFaded,
 		fontSize: 20,
+	},
+	selectedButton: {
+		flexDirection: 'row',
+		alignSelf: 'stretch',
+		alignItems: 'center',
+		paddingTop: 16,
+		paddingRight: 20,
+		paddingBottom: 16,
+		paddingLeft: 20,
+		marginBottom: 8,
+		borderRadius: 8,
+		backgroundColor: '#FFF',
+		elevation: 1,
+	},
+	selectedButtonText: {
+		marginLeft: 20,
+		color: Colors.neutral,
+		fontSize: 20,
+	},
+	selectedButtonSubtext: {
+		marginLeft: 8,
+		color: Colors.neutralSlightFaded,
 	},
 });
 

@@ -10,7 +10,7 @@ const persistConfig = {
   key: 'root',
   storage: FSStorage(),
   // stateReconciler: autoMergeLevel2,
-  blacklist: ['currTransaction', 'transactionsCurrMonth'],
+  blacklist: ['categoriesCheckbox', 'currTransaction', 'transactionsCurrMonth', 'currBudget'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

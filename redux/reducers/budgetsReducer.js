@@ -1,6 +1,9 @@
+import { ADD_BUDGET } from '../actions/actionTypes';
 
 export default(state = defaultState, action) => {
 	switch(action.type) {
+		case ADD_BUDGET:
+			return [ action.payload, ...state ];
 		default:
 			return state;
 	}
@@ -18,7 +21,10 @@ const defaultState =
 		name: 'Necessities',
 		amount: '240',
 		categories: ['Food'],
-		month: 5,
+		startDate: '1-6-19',
+		endDate: '30-6-19',
+		type: 'monthly',
+		repeat: true,
 	},
 	{
 		_id: '2',
@@ -30,6 +36,9 @@ const defaultState =
 		name: 'Everything',
 		amount: '400',
 		categories: [],
-		month: 5,
+		startDate: '1-6-19',
+		endDate: '30-6-19',
+		type: 'monthly',
+		repeat: true,
 	},
 ];
